@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login & Register</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f5f5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .header h1 {
+        font-size: 20px;
+        font-weight: 500;
+      }
+
+      .main-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+      }
+
+      .container {
+        background: white;
+        padding: 50px 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      .form-toggle {
+        display: flex;
+        margin-bottom: 30px;
+        background: #f0f0f0;
+        border-radius: 25px;
+        padding: 3px;
+        position: relative;
+      }
+
+      .toggle-btn {
+        flex: 1;
+        text-align: center;
+        padding: 10px 20px;
+        border: none;
+        background: none;
+        color: #666;
+        font-weight: 500;
+        cursor: pointer;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+      }
+
+      .toggle-btn.active {
+        color: white;
+      }
+
+      .toggle-slider {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: calc(50% - 3px);
+        height: calc(100% - 6px);
+        background: linear-gradient(135deg, #1e88e5, #1565c0);
+        border-radius: 25px;
+        transition: transform 0.3s ease;
+        z-index: 1;
+      }
+
+      .toggle-slider.register {
+        transform: translateX(calc(100% + 3px));
+      }
+
+      .login-title {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 40px;
+        font-weight: 300;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 15px 50px 15px 50px;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        font-size: 16px;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+      }
+
+      .form-group select {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        background-size: 16px;
+        cursor: pointer;
+      }
+
+      .form-group select:focus {
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231e88e5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      }
+
+      .form-group select option {
+        padding: 10px;
+        background: white;
+        color: #333;
+      }
+
+      .form-group select:disabled {
+        background-color: #e9ecef;
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .form-group select:disabled + label {
+        color: #6c757d;
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: #1e88e5;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+      }
+
+      .form-group input.error,
+      .form-group select.error {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+      }
+
+      .form-group input.success,
+      .form-group select.success {
+        border-color: #28a745;
+        box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+      }
+
+      .form-group label {
+        position: absolute;
+        top: 15px;
+        left: 50px;
+        color: #999;
+        font-size: 16px;
+        pointer-events: none;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus + label,
+      .form-group input:not(:placeholder-shown) + label,
+      .form-group select:focus + label,
+      .form-group select:not([value=""]) + label {
+        top: -8px;
+        left: 45px;
+        font-size: 12px;
+        color: #1e88e5;
+        background: white;
+        padding: 0 5px;
+      }
+
+      .input-icon {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        font-size: 16px;
+      }
+
+      .show-password {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        cursor: pointer;
+        font-size: 16px;
+        background: none;
+        border: none;
+        padding: 5px;
+      }
+
+      .show-password:hover {
+        color: #1e88e5;
+      }
+
+      .error-message {
+        color: #dc3545;
+        font-size: 12px;
+        text-align: left;
+        margin-top: 5px;
+        padding-left: 15px;
+        display: none;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #1e88e5, #1565c0);
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(30, 136, 229, 0.3);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .forgot-password {
+        margin-top: 20px;
+      }
+
+      .forgot-password a {
+        color: #1e88e5;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+      }
+
+      .forgot-password a:hover {
+        color: #1565c0;
+      }
+
+      .register-form {
+        display: none;
+      }
+
+      .register-form.active {
+        display: block;
+      }
+
+      .login-form.active {
+        display: block;
+      }
+
+      .login-form {
+        display: none;
+      }
+
+      .form-content {
+        opacity: 1;
+        transform: translateX(0);
+        transition: all 0.3s ease;
+      }
+
+      .form-content.fade-out {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      .alert {
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+      }
+
+      .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 40px 30px;
+          margin: 20px;
+        }
+
+        .header {
+          padding: 15px;
+        }
+
+        .header h1 {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <img src="/image/logo.png" alt="Logo" />
+      </div>
+      <h1>Benchamarachuthit Schedule For Student</h1>
+    </div>
+
+    <div class="main-content">
+      <div class="container">
+        <div class="alert alert-success" id="successAlert"></div>
+        <div class="alert alert-error" id="errorAlert"></div>
+
+        <div class="form-toggle">
+          <button class="toggle-btn active" onclick="showLogin()">Login</button>
+          <button class="toggle-btn" onclick="showRegister()">Register</button>
+          <div class="toggle-slider" id="toggleSlider"></div>
+        </div>
+
+        <div class="form-content" id="formContent">
+          <!-- Login Form -->
+          <div class="login-form active" id="loginForm">
+            <h2 class="login-title">Login</h2>
+            <form id="loginFormElement">
+              <div class="form-group">
+                <i class="bi bi-envelope input-icon"></i>
+                <input type="email" id="loginEmail" placeholder=" " required />
+                <label>Email</label>
+                <div class="error-message" id="loginEmailError"></div>
+              </div>
+              <div class="form-group">
+                <i class="bi bi-lock input-icon"></i>
+                <input
+                  type="password"
+                  id="loginPassword"
+                  placeholder=" "
+                  required
+                />
+                <label>Password</label>
+                <button
+                  type="button"
+                  class="show-password"
+                  onclick="togglePassword('loginPassword')"
+                >
+                  <i class="bi bi-eye"></i>
+                </button>
+                <div class="error-message" id="loginPasswordError"></div>
+              </div>
+              <button type="submit" class="submit-btn" id="loginBtn">
+                Sign in
+              </button>
+              <div class="forgot-password">
+                <a href="#" onclick="forgotPassword()">Forgot your password?</a>
+              </div>
+            </form>
+          </div>
+
+          <!-- Register Form -->
+          <div class="register-form" id="registerForm">
+            <h2 class="login-title">Register</h2>
+            <form id="registerFormElement">
+              <div class="form-group">
+                <i class="bi bi-card-text input-icon"></i>
+                <input type="text" id="studentId" placeholder=" " required />
+                <label>รหัสนักเรียน</label>
+                <div class="error-message" id="studentIdError"></div>
+              </div>
+              <div class="form-group">
+                <i class="bi bi-mortarboard input-icon"></i>
+                <select id="gradeLevel" required>
+                  <option value="" disabled selected hidden></option>
+                  <option value="ม.1">ม.1</option>
+                  <option value="ม.2">ม.2</option>
+                  <option value="ม.3">ม.3</option>
+                  <option value="ม.4">ม.4</option>
+                  <option value="ม.5">ม.5</option>
+                  <option value="ม.6">ม.6</option>
+                </select>
+                <label>ชั้น</label>
+                <div class="error-message" id="gradeLevelError"></div>
+              </div>
+              <div class="form-group">
+                <i class="bi bi-door-open input-icon"></i>
+                <select id="classroom" required disabled>
+                  <option value="" disabled selected hidden></option>
+                </select>
+                <label>ห้อง</label>
+                <div class="error-message" id="classroomError"></div>
+              </div>
+              <div class="form-group">
+                <i class="bi bi-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="registerEmail"
+                  placeholder=" "
+                  required
+                />
+                <label>Email Address</label>
+                <div class="error-message" id="registerEmailError"></div>
+              </div>
+              <div class="form-group">
+                <i class="bi bi-lock input-icon"></i>
+                <input
+                  type="password"
+                  id="registerPassword"
+                  placeholder=" "
+                  required
+                />
+                <label>Password</label>
+                <button
+                  type="button"
+                  class="show-password"
+                  onclick="togglePassword('registerPassword')"
+                >
+                  <i class="bi bi-eye"></i>
+                </button>
+                <div class="error-message" id="registerPasswordError"></div>
+              </div>
+              <div class="form-group">
+                <i class="bi bi-shield-check input-icon"></i>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  placeholder=" "
+                  required
+                />
+                <label>Confirm Password</label>
+                <button
+                  type="button"
+                  class="show-password"
+                  onclick="togglePassword('confirmPassword')"
+                >
+                  <i class="bi bi-eye"></i>
+                </button>
+                <div class="error-message" id="confirmPasswordError"></div>
+              </div>
+              <button type="submit" class="submit-btn" id="registerBtn">
+                Create Account
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        sendPasswordResetEmail,
+        updateProfile,
+        sendEmailVerification,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBfrhiskCagKW3X-IybZYZh0_K4F1j7724",
+        authDomain: "schedule-for-student.firebaseapp.com",
+        projectId: "schedule-for-student",
+        storageBucket: "schedule-for-student.firebasestorage.app",
+        messagingSenderId: "454469640747",
+        appId: "1:454469640747:web:991147e163e36e9d2bc06e",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Make Firebase functions available globally
+      window.auth = auth;
+      window.db = db;
+      window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+      window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+      window.sendPasswordResetEmail = sendPasswordResetEmail;
+      window.updateProfile = updateProfile;
+      window.sendEmailVerification = sendEmailVerification;
+      window.doc = doc;
+      window.setDoc = setDoc;
+      window.getDoc = getDoc;
+      window.collection = collection;
+      window.addDoc = addDoc;
+    </script>
+
+    <script>
+      // Validation functions
+      function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+      }
+
+      function validatePassword(password) {
+        return password.length >= 6;
+      }
+
+      function updateClassroomOptions(gradeLevel) {
+        const classroomSelect = document.getElementById("classroom");
+
+        // Clear existing options
+        classroomSelect.innerHTML =
+          '<option value="" disabled selected hidden></option>';
+
+        if (!gradeLevel) {
+          classroomSelect.disabled = true;
+          return;
+        }
+
+        // Enable classroom dropdown
+        classroomSelect.disabled = false;
+
+        let maxRooms;
+        // ม.1-3 have 10 rooms, ม.4-6 have 16 rooms
+        if (["ม.1", "ม.2", "ม.3"].includes(gradeLevel)) {
+          maxRooms = 10;
+        } else if (["ม.4", "ม.5", "ม.6"].includes(gradeLevel)) {
+          maxRooms = 16;
+        }
+
+        // Add room options
+        for (let i = 1; i <= maxRooms; i++) {
+          const option = document.createElement("option");
+          option.value = i.toString();
+          option.textContent = i.toString();
+          classroomSelect.appendChild(option);
+        }
+      }
+
+      function validateStudentId(studentId) {
+        // Thai student ID validation (5 digits maximum)
+        const re = /^[0-9]{1,5}$/;
+        return re.test(studentId);
+      }
+
+      function showError(fieldId, message) {
+        const field = document.getElementById(fieldId);
+        const errorDiv = document.getElementById(fieldId + "Error");
+
+        field.classList.add("error");
+        field.classList.remove("success");
+        errorDiv.textContent = message;
+        errorDiv.style.display = "block";
+      }
+
+      function showSuccess(fieldId) {
+        const field = document.getElementById(fieldId);
+        const errorDiv = document.getElementById(fieldId + "Error");
+
+        field.classList.add("success");
+        field.classList.remove("error");
+        errorDiv.style.display = "none";
+      }
+
+      function clearErrors() {
+        const inputs = document.querySelectorAll("input");
+        const errors = document.querySelectorAll(".error-message");
+
+        inputs.forEach((input) => {
+          input.classList.remove("error", "success");
+        });
+
+        errors.forEach((error) => {
+          error.style.display = "none";
+        });
+      }
+
+      function showAlert(message, type) {
+        const alertDiv = document.getElementById(
+          type === "success" ? "successAlert" : "errorAlert"
+        );
+        alertDiv.textContent = message;
+        alertDiv.style.display = "block";
+
+        setTimeout(() => {
+          alertDiv.style.display = "none";
+        }, 5000);
+      }
+
+      // Firebase Authentication functions
+      async function loginUser(email, password) {
+        try {
+          const userCredential = await window.signInWithEmailAndPassword(
+            window.auth,
+            email,
+            password
+          );
+
+          // Check if email is verified
+          if (!userCredential.user.emailVerified) {
+            showAlert("กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ", "error");
+            return;
+          }
+
+          // Get additional student data from Firestore
+          const studentDocRef = window.doc(
+            window.db,
+            "students",
+            userCredential.user.uid
+          );
+          const studentDoc = await window.getDoc(studentDocRef);
+
+          if (studentDoc.exists()) {
+            const studentData = studentDoc.data();
+            console.log("Student data:", studentData);
+            showAlert(
+              `ยินดีต้อนรับ ${studentData.studentId} - ${studentData.gradeLevel}/${studentData.classroom}`,
+              "success"
+            );
+          } else {
+            showAlert("เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับ", "success");
+          }
+
+          console.log("User logged in:", userCredential.user);
+
+          // Redirect to dashboard or main app after successful login
+          setTimeout(() => {
+            // window.location.href = '/dashboard.html';
+            console.log("Ready to redirect to dashboard");
+          }, 2000);
+        } catch (error) {
+          let errorMessage = "เข้าสู่ระบบล้มเหลว กรุณาลองใหม่อีกครั้ง";
+
+          switch (error.code) {
+            case "auth/user-not-found":
+              errorMessage = "ไม่พบบัญชีที่ใช้อีเมลนี้";
+              break;
+            case "auth/wrong-password":
+              errorMessage = "รหัสผ่านไม่ถูกต้อง";
+              break;
+            case "auth/invalid-email":
+              errorMessage = "รูปแบบอีเมลไม่ถูกต้อง";
+              break;
+            case "auth/too-many-requests":
+              errorMessage =
+                "พยายามเข้าสู่ระบบหลายครั้งเกินไป กรุณาลองใหม่อีกครั้งในภายหลัง";
+              break;
+            default:
+              console.error("Login error:", error);
+          }
+
+          showAlert(errorMessage, "error");
+        }
+      }
+
+      async function registerUser(
+        studentId,
+        gradeLevel,
+        classroom,
+        email,
+        password
+      ) {
+        try {
+          // Create user in Firebase Authentication
+          const userCredential = await window.createUserWithEmailAndPassword(
+            window.auth,
+            email,
+            password
+          );
+
+          // Update user profile with student information
+          await window.updateProfile(userCredential.user, {
+            displayName: `${studentId} - ${gradeLevel}/${classroom}`,
+          });
+
+          // Send email verification
+          await window.sendEmailVerification(userCredential.user);
+
+          // Store additional student data in Firestore
+          const studentData = {
+            studentId: studentId,
+            gradeLevel: gradeLevel,
+            classroom: classroom,
+            email: email,
+            uid: userCredential.user.uid,
+            createdAt: new Date(),
+            role: "student",
+            emailVerified: false,
+          };
+
+          // Save to Firestore 'students' collection
+          await window.setDoc(
+            window.doc(window.db, "students", userCredential.user.uid),
+            studentData
+          );
+
+          console.log("Student data stored in Firestore:", studentData);
+
+          showAlert(
+            "บัญชีถูกสร้างเรียบร้อยแล้ว! กรุณาตรวจสอบอีเมลเพื่อยืนยันบัญชี",
+            "success"
+          );
+          console.log("User registered:", userCredential.user);
+
+          // Switch to login form
+          setTimeout(() => {
+            showLogin();
+          }, 2000);
+        } catch (error) {
+          let errorMessage = "การสมัครสมาชิกล้มเหลว กรุณาลองใหม่อีกครั้ง";
+
+          switch (error.code) {
+            case "auth/email-already-in-use":
+              errorMessage = "มีบัญชีที่ใช้อีเมลนี้อยู่แล้ว";
+              break;
+            case "auth/invalid-email":
+              errorMessage = "รูปแบบอีเมลไม่ถูกต้อง";
+              break;
+            case "auth/weak-password":
+              errorMessage =
+                "รหัสผ่านไม่ปลอดภัยพอ กรุณาเลือกรหัสผ่านที่แข็งแกร่งกว่า";
+              break;
+            default:
+              console.error("Registration error:", error);
+          }
+
+          showAlert(errorMessage, "error");
+        }
+      }
+
+      async function forgotPassword() {
+        const email = prompt("Please enter your email address:");
+        if (!email) return;
+
+        if (!validateEmail(email)) {
+          showAlert("Please enter a valid email address.", "error");
+          return;
+        }
+
+        try {
+          await window.sendPasswordResetEmail(window.auth, email);
+          showAlert("Password reset email sent! Check your inbox.", "success");
+        } catch (error) {
+          let errorMessage = "Failed to send reset email.";
+
+          if (error.code === "auth/user-not-found") {
+            errorMessage = "No account found with this email address.";
+          }
+
+          showAlert(errorMessage, "error");
+        }
+      }
+
+      // Form toggle functions
+      function showLogin() {
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+        const toggleSlider = document.getElementById("toggleSlider");
+        const toggleBtns = document.querySelectorAll(".toggle-btn");
+
+        toggleBtns[0].classList.add("active");
+        toggleBtns[1].classList.remove("active");
+        toggleSlider.classList.remove("register");
+
+        const formContent = document.getElementById("formContent");
+        formContent.classList.add("fade-out");
+
+        setTimeout(() => {
+          registerForm.classList.remove("active");
+          loginForm.classList.add("active");
+          formContent.classList.remove("fade-out");
+          clearErrors();
+        }, 150);
+      }
+
+      function showRegister() {
+        const loginForm = document.getElementById("loginForm");
+        const registerForm = document.getElementById("registerForm");
+        const toggleSlider = document.getElementById("toggleSlider");
+        const toggleBtns = document.querySelectorAll(".toggle-btn");
+
+        toggleBtns[1].classList.add("active");
+        toggleBtns[0].classList.remove("active");
+        toggleSlider.classList.add("register");
+
+        const formContent = document.getElementById("formContent");
+        formContent.classList.add("fade-out");
+
+        setTimeout(() => {
+          loginForm.classList.remove("active");
+          registerForm.classList.add("active");
+          formContent.classList.remove("fade-out");
+          clearErrors();
+        }, 150);
+      }
+
+      function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const button = input.parentElement.querySelector(".show-password");
+        const icon = button.querySelector("i");
+
+        if (input.type === "password") {
+          input.type = "text";
+          icon.classList.remove("bi-eye");
+          icon.classList.add("bi-eye-slash");
+        } else {
+          input.type = "password";
+          icon.classList.remove("bi-eye-slash");
+          icon.classList.add("bi-eye");
+        }
+      }
+
+      // Event listeners
+      document.addEventListener("DOMContentLoaded", function () {
+        // Login form
+        document
+          .getElementById("loginFormElement")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById("loginEmail").value;
+            const password = document.getElementById("loginPassword").value;
+
+            let isValid = true;
+
+            if (!email) {
+              showError("loginEmail", "Email is required");
+              isValid = false;
+            } else if (!validateEmail(email)) {
+              showError("loginEmail", "Please enter a valid email address");
+              isValid = false;
+            } else {
+              showSuccess("loginEmail");
+            }
+
+            if (!password) {
+              showError("loginPassword", "Password is required");
+              isValid = false;
+            } else {
+              showSuccess("loginPassword");
+            }
+
+            if (isValid) {
+              const loginBtn = document.getElementById("loginBtn");
+              loginBtn.textContent = "Signing in...";
+              loginBtn.disabled = true;
+
+              loginUser(email, password).finally(() => {
+                loginBtn.textContent = "Sign in";
+                loginBtn.disabled = false;
+              });
+            }
+          });
+
+        // Register form
+        document
+          .getElementById("registerFormElement")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            clearErrors();
+
+            const studentId = document.getElementById("studentId").value;
+            const gradeLevel = document.getElementById("gradeLevel").value;
+            const classroom = document.getElementById("classroom").value;
+            const email = document.getElementById("registerEmail").value;
+            const password = document.getElementById("registerPassword").value;
+            const confirmPassword =
+              document.getElementById("confirmPassword").value;
+
+            let isValid = true;
+
+            // Validate student ID
+            if (!studentId.trim()) {
+              showError("studentId", "กรุณากรอกรหัสนักเรียน");
+              isValid = false;
+            } else if (!validateStudentId(studentId)) {
+              showError("studentId", "รหัสนักเรียนต้องเป็นตัวเลข 1-5 หลัก");
+              isValid = false;
+            } else {
+              showSuccess("studentId");
+            }
+
+            // Validate grade level
+            if (!gradeLevel) {
+              showError("gradeLevel", "กรุณาเลือกชั้น");
+              isValid = false;
+            } else {
+              showSuccess("gradeLevel");
+            }
+
+            // Validate classroom
+            if (!classroom) {
+              showError("classroom", "กรุณาเลือกห้อง");
+              isValid = false;
+            } else {
+              showSuccess("classroom");
+            }
+
+            // Validate email
+            if (!email) {
+              showError("registerEmail", "กรุณากรอกอีเมล");
+              isValid = false;
+            } else if (!validateEmail(email)) {
+              showError("registerEmail", "กรุณากรอกอีเมลให้ถูกต้อง");
+              isValid = false;
+            } else {
+              showSuccess("registerEmail");
+            }
+
+            // Validate password
+            if (!password) {
+              showError("registerPassword", "กรุณากรอกรหัสผ่าน");
+              isValid = false;
+            } else if (!validatePassword(password)) {
+              showError(
+                "registerPassword",
+                "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร"
+              );
+              isValid = false;
+            } else {
+              showSuccess("registerPassword");
+            }
+
+            // Validate confirm password
+            if (!confirmPassword) {
+              showError("confirmPassword", "กรุณายืนยันรหัสผ่าน");
+              isValid = false;
+            } else if (password !== confirmPassword) {
+              showError("confirmPassword", "รหัสผ่านไม่ตรงกัน");
+              isValid = false;
+            } else {
+              showSuccess("confirmPassword");
+            }
+
+            if (isValid) {
+              const registerBtn = document.getElementById("registerBtn");
+              registerBtn.textContent = "กำลังสร้างบัญชี...";
+              registerBtn.disabled = true;
+
+              registerUser(
+                studentId,
+                gradeLevel,
+                classroom,
+                email,
+                password
+              ).finally(() => {
+                registerBtn.textContent = "Create Account";
+                registerBtn.disabled = false;
+              });
+            }
+          });
+
+        // Grade level change handler
+        document
+          .getElementById("gradeLevel")
+          .addEventListener("change", function (e) {
+            const selectedGrade = e.target.value;
+            updateClassroomOptions(selectedGrade);
+
+            // Clear any existing classroom validation
+            const classroomSelect = document.getElementById("classroom");
+            classroomSelect.classList.remove("error", "success");
+            const classroomError = document.getElementById("classroomError");
+            classroomError.style.display = "none";
+          });
+
+        // Real-time password confirmation
+        document
+          .getElementById("confirmPassword")
+          .addEventListener("input", function (e) {
+            const password = document.getElementById("registerPassword").value;
+            const confirmPassword = e.target.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+              showError("confirmPassword", "Passwords do not match");
+            } else if (confirmPassword && password === confirmPassword) {
+              showSuccess("confirmPassword");
+            }
+          });
+      });
+
+      showLogin();
+    </script>
+  </body>
+</html>
